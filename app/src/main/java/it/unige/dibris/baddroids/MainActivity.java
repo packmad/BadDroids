@@ -20,7 +20,6 @@ public class MainActivity extends Activity {
 
         checkMandatoryPermissions();
 
-
     }
 
     private void checkMandatoryPermissions() {

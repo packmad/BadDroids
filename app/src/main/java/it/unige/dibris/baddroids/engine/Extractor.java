@@ -1,5 +1,9 @@
 package it.unige.dibris.baddroids.engine;
 
+
+import net.dongliu.apk.parser.ApkFile;
+import net.dongliu.apk.parser.bean.ApkMeta;
+
 import org.jf.dexlib2.DexFileFactory;
 import org.jf.dexlib2.iface.ClassDef;
 import org.jf.dexlib2.iface.DexFile;
@@ -14,39 +18,55 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import it.unige.dibris.baddroids.domain.MethodInvocation;
 
-/**
- * Created by Simone Aonzo on 13/03/17.
- */
-public class ApiInvocationExtractor extends InvocationExtractor {
-    private File apk;
+public class Extractor {
+    private Set<MethodInvocation> methodInvocations;
+    private Set<String> androidDeclaredPermissions;
+    private File apkFile;
 
-    public ApiInvocationExtractor(File apk) {
-        this.apk = apk;
+    public Extractor(File apkFile) {
+        this.apkFile = apkFile;
     }
 
-    public File getApk() {
-        return apk;
+    public Set<MethodInvocation> getMethodInvocations() {
+        return methodInvocations;
     }
 
-    public void setApk(File apk) {
-        this.apk = apk;
+    public void setMethodInvocations(Set<MethodInvocation> methodInvocations) {
+        this.methodInvocations = methodInvocations;
     }
 
-    @Override
-    public Set<MethodInvocation> extractApiInvocations(File apk) throws org.jf.util.ExceptionWithContext {
-        if (!apk.exists())
-            return null;
+    public Set<String> getAndroidDeclaredPermissions() {
+        return androidDeclaredPermissions;
+    }
 
-        DexFile dexFile;
-        try {
-            dexFile = DexFileFactory.loadDexFile(apk.toString(), 19, false);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-        HashSet<MethodInvocation> apiInvocations = new HashSet<MethodInvocation>();
+    public void setAndroidDeclaredPermissions(Set<String> androidDeclaredPermissions) {
+        this.androidDeclaredPermissions = androidDeclaredPermissions;
+    }
+
+    public File getApkFile() {
+        return apkFile;
+    }
+
+    public void setApkFile(File apkFile) {
+        this.apkFile = apkFile;
+    }
+
+    public void extract() throws IOException {
+        extractPermissions();
+        extractMethodInvocations();
+    }
+
+
+    private void extractPermissions() throws IOException {
+        ApkMeta apkMeta = new ApkFile(apkFile).getApkMeta();
+        androidDeclaredPermissions = new HashSet<>(apkMeta.getUsesPermissions());
+    }
+
+
+    private void extractMethodInvocations() throws IOException  {
+        DexFile dexFile = DexFileFactory.loadDexFile(apkFile.toString(), 19, false);
+        methodInvocations = new HashSet<>();
         for (ClassDef classDef : dexFile.getClasses()) {
             for (Method method : classDef.getMethods()) {
                 MethodImplementation implementation = method.getImplementation();
@@ -69,11 +89,10 @@ public class ApiInvocationExtractor extends InvocationExtractor {
                     String definingClass = mr.getDefiningClass();
                     if (definingClass.matches("^L(com/android|android|com/google|java).*$")) { // is an API
                         MethodInvocation mi = new MethodInvocation(definingClass, mr.getName());
-                        apiInvocations.add(mi);
+                        methodInvocations.add(mi);
                     }
                 }
             }
         }
-        return apiInvocations;
     }
 }

@@ -1,4 +1,4 @@
-package it.unige.dibris.baddroids.domain;
+package it.unige.dibris.baddroids.engine;
 
 import java.io.Serializable;
 import java.util.regex.Matcher;
