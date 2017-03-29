@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">BadDroids</string>
+    <string name="apps_installed">Installed apps: </string>
+</resources>
