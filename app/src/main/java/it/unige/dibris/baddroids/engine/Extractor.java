@@ -17,6 +17,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class Extractor {
@@ -91,13 +93,31 @@ public class Extractor {
                     Instruction35c i35c = (Instruction35c) instruction;
                     MethodReference mr = (MethodReference) i35c.getReference();
                     String definingClass = mr.getDefiningClass();
-                    if (definingClass.matches("^L(com/android|android|com/google|java).*$")) { // is an API
-                        MethodInvocation mi = new MethodInvocation(definingClass, mr.getName());
-                        methodInvocations.add(mi);
+                    String name = mr.getName();
+                    if (isRelevant(definingClass, name)) {
+                        methodInvocations.add(new MethodInvocation(mr.getDefiningClass(), mr.getName()));
                     }
                 }
             }
         }
+    }
+
+    private static final Pattern notObfuscated = Pattern.compile("^L[a-zA-Z]{2,}(/[a-zA-Z0-9_$]{2,})*;");
+    private static final Pattern validJava = Pattern.compile("^Ljava/(time|util|lang|security|math)/.*$");
+    private static final Pattern apiPackage = Pattern.compile("^L(com/android|android|com/google|java).*$");
+
+
+    private boolean isRelevant(String definingClass, String name) {
+        Matcher matchApi = apiPackage.matcher(definingClass);
+        Matcher matchNotObfuscated = notObfuscated.matcher(definingClass);
+        if (matchApi.matches() && matchNotObfuscated.matches()) {
+            if (name.startsWith("zz")) {
+                return false;
+            }
+            Matcher matchValidJava = validJava.matcher(definingClass);
+            return !(!matchValidJava.matches() && name.length() <= 2);
+        }
+        return false;
     }
 
 
