@@ -50,6 +50,13 @@ public class InstalledAppsActivity extends Activity {
                 try {
                     extractor.extract();
                     PermInvokeDbHelper dbHelper = new PermInvokeDbHelper(getApplicationContext());
+                    /*
+                    Long test;
+                    test = dbHelper.getIdFromPermission("android.permission.SEND_SMS");
+                    test = dbHelper.getIdFromPermission("nothing");
+                    test = dbHelper.getIdFromInvoke("java.lang.String-><init>");
+                    test = dbHelper.getIdFromInvoke("nothing2");
+                    */
                     SQLiteDatabase db = dbHelper.getReadableDatabase();
                 } catch (IOException e) {
                     e.printStackTrace();

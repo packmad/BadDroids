@@ -1,23 +1,13 @@
 package it.unige.dibris.baddroids.engine;
 
-import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class MethodInvocation implements Serializable {
-    private static final long serialVersionUID = 7526472295622776147L;
-
+public class MethodInvocation {
     private String definingClass;
-
     private String methodName;
 
-
-    public MethodInvocation(String lineFromPermissionMapping) {
-        String[] split = lineFromPermissionMapping.split("-");
-        this.definingClass = fromDexToJavaPackname(split[0]);
-        this.methodName = split[1];
-    }
 
     public MethodInvocation(String definingClass, String methodName) {
         this.definingClass = fromDexToJavaPackname(definingClass);
@@ -69,11 +59,6 @@ public class MethodInvocation implements Serializable {
     public String toString() {
         return String.format("%s->%s%n", definingClass, methodName);
     }
-
-    public String toHookString() {
-        return "{\"class_name\":\"" + definingClass + "\",\"method\":\""+ methodName + "\",\"thisObject\":false,\"type\":\"generic\"}";
-    }
-
 
     private static final Pattern notObfuscated = Pattern.compile("^[a-zA-Z]{2,}(\\.[a-zA-Z0-9_$]{2,})*$");
 
