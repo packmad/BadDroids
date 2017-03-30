@@ -22,6 +22,7 @@ import java.util.List;
 
 import it.unige.dibris.baddroids.db.PermInvokeDbHelper;
 import it.unige.dibris.baddroids.engine.Extractor;
+import it.unige.dibris.baddroids.engine.MappingGenerator;
 
 public class InstalledAppsActivity extends Activity {
     InstalledAppsActivity iaa = this;
@@ -57,7 +58,9 @@ public class InstalledAppsActivity extends Activity {
                     test = dbHelper.getIdFromInvoke("java.lang.String-><init>");
                     test = dbHelper.getIdFromInvoke("nothing2");
                     */
-                    SQLiteDatabase db = dbHelper.getReadableDatabase();
+                    MappingGenerator mappingGenerator = new MappingGenerator(extractor, dbHelper);
+                    mappingGenerator.generate();
+                    Log.d("EXTRACTOR", "No errors during extraction");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

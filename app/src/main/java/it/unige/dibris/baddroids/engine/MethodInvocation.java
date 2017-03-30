@@ -57,7 +57,7 @@ public class MethodInvocation {
 
     @Override
     public String toString() {
-        return String.format("%s->%s%n", definingClass, methodName);
+        return String.format("%s->%s", definingClass, methodName);
     }
 
     private static final Pattern notObfuscated = Pattern.compile("^[a-zA-Z]{2,}(\\.[a-zA-Z0-9_$]{2,})*$");

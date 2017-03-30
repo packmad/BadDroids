@@ -125,7 +125,7 @@ public class PermInvokeDbHelper extends SQLiteOpenHelper {
     }
 
 
-    private Long getIdFrom(String searchName, String id, String column, String table) {
+    private long getIdFrom(String searchName, String id, String column, String table) {
         String[] projection = {id};
         String selection = column + " = ?";
         String[] selectionArgs = { searchName };
@@ -138,7 +138,7 @@ public class PermInvokeDbHelper extends SQLiteOpenHelper {
                 null,
                 null);
         if (cursor.getCount() == 1 && cursor.moveToNext()) {
-            Long ret = cursor.getLong(cursor.getColumnIndexOrThrow(id));
+            long ret = cursor.getLong(cursor.getColumnIndexOrThrow(id));
             return ret;
         }
         Log.e(TAG, "Two rows??? " + searchName);
@@ -146,7 +146,7 @@ public class PermInvokeDbHelper extends SQLiteOpenHelper {
     }
 
 
-    public Long getIdFromInvoke(String invocation) {
+    public long getIdFromInvoke(String invocation) {
         return getIdFrom(invocation,
                 MethodInvocationEntry._ID,
                 MethodInvocationEntry.COLUMN_NAME_CLASS_METHOD,
@@ -154,7 +154,7 @@ public class PermInvokeDbHelper extends SQLiteOpenHelper {
     }
 
 
-    public Long getIdFromPermission(String pername) {
+    public long getIdFromPermission(String pername) {
         return getIdFrom(pername,
                 PermissionEntry._ID,
                 PermissionEntry.COLUMN_NAME_PERNAME,
