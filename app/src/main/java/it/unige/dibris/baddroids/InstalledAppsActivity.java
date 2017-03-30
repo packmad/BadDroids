@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +20,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import it.unige.dibris.baddroids.db.PermInvokeDbHelper;
 import it.unige.dibris.baddroids.engine.Extractor;
 
 public class InstalledAppsActivity extends Activity {
@@ -42,16 +44,17 @@ public class InstalledAppsActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 PackageInfo pi = installedPackages.get(arg2);
-                Log.d(this.getClass().getCanonicalName(), String.format(">>> Start extracting from=%s", pi.packageName));
+                Log.d("EXTRACTOR", String.format(">>> Start extracting from=%s", pi.packageName));
                 File apk = new File(pi.applicationInfo.publicSourceDir);
                 Extractor extractor = new Extractor(apk);
                 try {
                     extractor.extract();
-
+                    PermInvokeDbHelper dbHelper = new PermInvokeDbHelper(getApplicationContext());
+                    SQLiteDatabase db = dbHelper.getReadableDatabase();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Log.d(this.getClass().getCanonicalName(), String.format("<<< End extracting from=%s", pi.packageName));
+                Log.d("EXTRACTOR", String.format("<<< End extracting from=%s", pi.packageName));
             }
         });
 
