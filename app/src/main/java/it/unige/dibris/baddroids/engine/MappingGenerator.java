@@ -1,5 +1,7 @@
 package it.unige.dibris.baddroids.engine;
 
+import android.database.sqlite.SQLiteDatabase;
+
 import java.util.HashSet;
 import java.util.Set;
 

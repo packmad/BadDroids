@@ -25,9 +25,10 @@ import it.unige.dibris.baddroids.engine.Extractor;
 import it.unige.dibris.baddroids.engine.MappingGenerator;
 
 public class InstalledAppsActivity extends Activity {
-    InstalledAppsActivity iaa = this;
-    ListView apps;
-    PackageManager packageManager;
+
+    private InstalledAppsActivity self = this;
+    private PackageManager packageManager;
+    private ListView apps;
 
 
     @Override
@@ -45,26 +46,7 @@ public class InstalledAppsActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 PackageInfo pi = installedPackages.get(arg2);
-                Log.d("EXTRACTOR", String.format(">>> Start extracting from=%s", pi.packageName));
-                File apk = new File(pi.applicationInfo.publicSourceDir);
-                Extractor extractor = new Extractor(apk);
-                try {
-                    extractor.extract();
-                    PermInvokeDbHelper dbHelper = new PermInvokeDbHelper(getApplicationContext());
-                    /*
-                    Long test;
-                    test = dbHelper.getIdFromPermission("android.permission.SEND_SMS");
-                    test = dbHelper.getIdFromPermission("nothing");
-                    test = dbHelper.getIdFromInvoke("java.lang.String-><init>");
-                    test = dbHelper.getIdFromInvoke("nothing2");
-                    */
-                    MappingGenerator mappingGenerator = new MappingGenerator(extractor, dbHelper);
-                    mappingGenerator.generate();
-                    Log.d("EXTRACTOR", "No errors during extraction");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Log.d("EXTRACTOR", String.format("<<< End extracting from=%s", pi.packageName));
+                ClassificationService.startActionBaz(self, pi.applicationInfo.publicSourceDir);
             }
         });
 

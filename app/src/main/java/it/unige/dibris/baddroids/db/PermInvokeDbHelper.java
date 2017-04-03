@@ -20,17 +20,28 @@ import it.unige.dibris.baddroids.db.PermInvokeContract.MethodInvocationEntry;
 public class PermInvokeDbHelper extends SQLiteOpenHelper {
     private static final String TAG = PermInvokeDbHelper.class.getCanonicalName();
 
-    private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "PermInvoke.db";
-    private SQLiteDatabase readableDatabase;
+    private static PermInvokeDbHelper mInstance = null;
+    private static final int DATABASE_VERSION = 1;
+    private static SQLiteDatabase readableDatabase;
 
-    public PermInvokeDbHelper(Context context) {
+
+    public static PermInvokeDbHelper getInstance(Context ctx) {
+        if (mInstance == null) {
+            mInstance = new PermInvokeDbHelper(ctx.getApplicationContext());
+        }
+        if (readableDatabase == null || !readableDatabase.isOpen())
+            readableDatabase = mInstance.getReadableDatabase();
+        return mInstance;
+    }
+
+
+    private PermInvokeDbHelper(Context context) {
         this(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    public PermInvokeDbHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    private PermInvokeDbHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        readableDatabase = this.getReadableDatabase();
     }
 
 
@@ -52,7 +63,7 @@ public class PermInvokeDbHelper extends SQLiteOpenHelper {
                     MethodInvocationEntry.COLUMN_NAME_CLASS_METHOD + " TEXT)";
 
     private static final String SQL_CREATE_INVOKE_INDEX =
-           "CREATE INDEX invoke_index ON " + MethodInvocationEntry.TABLE_NAME + " (" +
+            "CREATE INDEX invoke_index ON " + MethodInvocationEntry.TABLE_NAME + " (" +
                     MethodInvocationEntry.COLUMN_NAME_CLASS_METHOD + ")";
 
     private static final String SQL_DELETE_INVOKE =
@@ -71,12 +82,19 @@ public class PermInvokeDbHelper extends SQLiteOpenHelper {
         try {
             populateDbWithPermissions(db, assetManager);
             db.execSQL(SQL_CREATE_PERMISSION_INDEX);
+
             populateDbWithInvokes(db, assetManager);
             db.execSQL(SQL_CREATE_INVOKE_INDEX);
-
+            db.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
+
     }
 
     @Override
@@ -85,6 +103,7 @@ public class PermInvokeDbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_DELETE_INVOKE);
         onCreate(db);
     }
+
 
     private void populateDbWithPermissions(SQLiteDatabase db, AssetManager assetManager) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(assetManager.open("perMapping.txt")));
@@ -104,6 +123,7 @@ public class PermInvokeDbHelper extends SQLiteOpenHelper {
             }
         }
     }
+
 
     private void populateDbWithInvokes(SQLiteDatabase db, AssetManager assetManager) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(assetManager.open("invMapping.txt")));
@@ -137,12 +157,16 @@ public class PermInvokeDbHelper extends SQLiteOpenHelper {
                 null,
                 null,
                 null);
-        if (cursor.getCount() == 1 && cursor.moveToNext()) {
-            long ret = cursor.getLong(cursor.getColumnIndexOrThrow(id));
-            return ret;
+
+        long res = -1L;
+        if (cursor.getCount() != 1) {
+            Log.e(TAG, String.format("cursor.count=%d with searchName=%s", cursor.getCount(), searchName));
         }
-        Log.e(TAG, "Two rows??? " + searchName);
-        return -1L;
+        else if (cursor.moveToNext()) {
+            res = cursor.getLong(cursor.getColumnIndexOrThrow(id));
+        }
+        cursor.close();
+        return res;
     }
 
 
@@ -160,5 +184,11 @@ public class PermInvokeDbHelper extends SQLiteOpenHelper {
                 PermissionEntry.COLUMN_NAME_PERNAME,
                 PermissionEntry.TABLE_NAME);
     }
+
+    /*
+    public void try2Fix() {
+        getWritableDatabase().execSQL("PRAGMA temp_store_directory='/data/data/it.unige.dibris.baddroids/tmpdb'");
+    }
+    */
 
 }
