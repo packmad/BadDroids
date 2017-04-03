@@ -1,28 +1,19 @@
 package it.unige.dibris.baddroids;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import it.unige.dibris.baddroids.db.PermInvokeDbHelper;
-import it.unige.dibris.baddroids.engine.Extractor;
-import it.unige.dibris.baddroids.engine.MappingGenerator;
 
 public class InstalledAppsActivity extends Activity {
 
@@ -46,7 +37,7 @@ public class InstalledAppsActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 PackageInfo pi = installedPackages.get(arg2);
-                ClassificationService.startActionBaz(self, pi.applicationInfo.publicSourceDir);
+                ClassificationService.startClassification(self, pi.applicationInfo.publicSourceDir);
             }
         });
 

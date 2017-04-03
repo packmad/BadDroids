@@ -24,7 +24,7 @@ public class ClassificationService extends IntentService {
     }
 
 
-    public static void startActionBaz(Context context, String baseApk) {
+    public static void startClassification(Context context, String baseApk) {
         Intent intent = new Intent(context, ClassificationService.class);
         Bundle bundle = new Bundle();
         bundle.putString(BASE_APK, baseApk);
