@@ -152,7 +152,7 @@ public class PermInvokeDbHelper extends SQLiteOpenHelper {
     }
 
 
-    private long getIdFrom(String searchName, String id, String column, String table) {
+    private double getWeightFrom(String searchName, String id, String column, String table) {
         String[] projection = {id};
         String selection = column + " = ?";
         String[] selectionArgs = { searchName };
@@ -165,29 +165,29 @@ public class PermInvokeDbHelper extends SQLiteOpenHelper {
                 null,
                 null);
 
-        long res = -1L;
+        double res = -1.0;
         if (cursor.getCount() != 1) {
             Log.e(TAG, String.format("cursor.count=%d with searchName=%s", cursor.getCount(), searchName));
         }
         else if (cursor.moveToNext()) {
-            res = cursor.getLong(cursor.getColumnIndexOrThrow(id));
+            res = cursor.getDouble(cursor.getColumnIndexOrThrow(id));
         }
         cursor.close();
         return res;
     }
 
 
-    public long getIdFromInvoke(String invocation) {
-        return getIdFrom(invocation,
-                MethodInvocationEntry._ID,
+    public double getWeightFromInvoke(String invocation) {
+        return getWeightFrom(invocation,
+                MethodInvocationEntry.COLUMN_NAME_INVWEIGHT,
                 MethodInvocationEntry.COLUMN_NAME_CLASS_METHOD,
                 MethodInvocationEntry.TABLE_NAME);
     }
 
 
-    public long getIdFromPermission(String pername) {
-        return getIdFrom(pername,
-                PermissionEntry._ID,
+    public double getWeightromPermission(String pername) {
+        return getWeightFrom(pername,
+                PermissionEntry.COLUMN_NAME_PERWEIGHT,
                 PermissionEntry.COLUMN_NAME_PERNAME,
                 PermissionEntry.TABLE_NAME);
     }

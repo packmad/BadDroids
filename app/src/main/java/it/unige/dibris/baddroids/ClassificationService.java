@@ -11,7 +11,7 @@ import java.io.IOException;
 
 import it.unige.dibris.baddroids.db.PermInvokeDbHelper;
 import it.unige.dibris.baddroids.engine.Extractor;
-import it.unige.dibris.baddroids.engine.MappingGenerator;
+import it.unige.dibris.baddroids.engine.Classifier;
 
 
 public class ClassificationService extends IntentService {
@@ -60,17 +60,18 @@ public class ClassificationService extends IntentService {
                 //dbHelper.try2Fix();
                     /*
                     Long test;
-                    test = dbHelper.getIdFromPermission("android.permission.SEND_SMS");
-                    test = dbHelper.getIdFromPermission("nothing");
-                    test = dbHelper.getIdFromInvoke("java.lang.String-><init>");
-                    test = dbHelper.getIdFromInvoke("nothing2");
+                    test = dbHelper.getWeightromPermission("android.permission.SEND_SMS");
+                    test = dbHelper.getWeightromPermission("nothing");
+                    test = dbHelper.getWeightFromInvoke("java.lang.String-><init>");
+                    test = dbHelper.getWeightFromInvoke("nothing2");
                     */
-                 Log.d(CLASS_NAME, "-- extraction finished");
-                MappingGenerator mappingGenerator = new MappingGenerator(extractor, dbHelper);
-                mappingGenerator.generate();
+                Log.d(CLASS_NAME, "--- extraction finished");
+                Classifier classifier = new Classifier(extractor, dbHelper);
+                boolean isMalware = classifier.isMalware();
                 long end_time = System.nanoTime();
                 int delta_time = (int) ((end_time - start_time) / 1000000);
                 Log.d(CLASS_NAME, "Time needed: " + delta_time + " ms");
+                Log.d(CLASS_NAME, "IsMalware? " + isMalware);
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
