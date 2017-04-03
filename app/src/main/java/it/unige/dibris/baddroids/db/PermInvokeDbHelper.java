@@ -16,13 +16,14 @@ import java.io.InputStreamReader;
 import it.unige.dibris.baddroids.App;
 import it.unige.dibris.baddroids.db.PermInvokeContract.PermissionEntry;
 import it.unige.dibris.baddroids.db.PermInvokeContract.MethodInvocationEntry;
+import it.unige.dibris.baddroids.engine.MethodInvocation;
 
 public class PermInvokeDbHelper extends SQLiteOpenHelper {
     private static final String TAG = PermInvokeDbHelper.class.getCanonicalName();
 
     private static final String DATABASE_NAME = "PermInvoke.db";
     private static PermInvokeDbHelper mInstance = null;
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static SQLiteDatabase readableDatabase;
 
 
@@ -48,7 +49,8 @@ public class PermInvokeDbHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_PERMISSION =
             "CREATE TABLE " + PermissionEntry.TABLE_NAME + " (" +
                     PermissionEntry._ID + " INTEGER PRIMARY KEY," +
-                    PermissionEntry.COLUMN_NAME_PERNAME + " TEXT)";
+                    PermissionEntry.COLUMN_NAME_PERNAME + " TEXT," +
+                    PermissionEntry.COLUMN_NAME_PERWEIGHT + " REAL)";
 
     private static final String SQL_CREATE_PERMISSION_INDEX =
             "CREATE INDEX permission_index ON " + PermissionEntry.TABLE_NAME + " (" +
@@ -60,7 +62,8 @@ public class PermInvokeDbHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_INVOKE =
             "CREATE TABLE " + MethodInvocationEntry.TABLE_NAME + " (" +
                     MethodInvocationEntry._ID + " INTEGER PRIMARY KEY," +
-                    MethodInvocationEntry.COLUMN_NAME_CLASS_METHOD + " TEXT)";
+                    MethodInvocationEntry.COLUMN_NAME_CLASS_METHOD + " TEXT," +
+                    MethodInvocationEntry.COLUMN_NAME_INVWEIGHT + " REAL)";
 
     private static final String SQL_CREATE_INVOKE_INDEX =
             "CREATE INDEX invoke_index ON " + MethodInvocationEntry.TABLE_NAME + " (" +
@@ -76,6 +79,7 @@ public class PermInvokeDbHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.w(TAG, ">>> Start db creation");
         db.execSQL(SQL_CREATE_PERMISSION);
         db.execSQL(SQL_CREATE_INVOKE);
         AssetManager assetManager = App.getContext().getAssets();
@@ -85,10 +89,11 @@ public class PermInvokeDbHelper extends SQLiteOpenHelper {
 
             populateDbWithInvokes(db, assetManager);
             db.execSQL(SQL_CREATE_INVOKE_INDEX);
-            db.close();
+            //db.close(); illegal state?
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Log.w(TAG, "<<< End db creation");
     }
 
     @Override
@@ -110,10 +115,11 @@ public class PermInvokeDbHelper extends SQLiteOpenHelper {
         String line = null;
         while((line = br.readLine()) != null) {
             String[] parts = line.split(",");
-            if (parts.length == 2) {
+            if (parts.length == 3) {
                 ContentValues cv = new ContentValues();
                 cv.put(PermissionEntry._ID, parts[0]);
                 cv.put(PermissionEntry.COLUMN_NAME_PERNAME, parts[1]);
+                cv.put(PermissionEntry.COLUMN_NAME_PERWEIGHT, parts[2]);
                 if (db.insert(PermissionEntry.TABLE_NAME, null, cv) == -1) {
                     Log.e(TAG, parts[0] + ' ' + parts[1]);
                 }
@@ -130,10 +136,11 @@ public class PermInvokeDbHelper extends SQLiteOpenHelper {
         String line = null;
         while((line = br.readLine()) != null) {
             String[] parts = line.split(",");
-            if (parts.length == 2) {
+            if (parts.length == 3) {
                 ContentValues cv = new ContentValues();
                 cv.put(MethodInvocationEntry._ID, parts[0]);
                 cv.put(MethodInvocationEntry.COLUMN_NAME_CLASS_METHOD, parts[1]);
+                cv.put(MethodInvocationEntry.COLUMN_NAME_INVWEIGHT, parts[2]);
                 if (db.insert(MethodInvocationEntry.TABLE_NAME, null, cv) == -1) {
                     Log.e(TAG, parts[0] + ' ' + parts[1]);
                 }
