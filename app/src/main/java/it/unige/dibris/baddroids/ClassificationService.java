@@ -1,13 +1,16 @@
 package it.unige.dibris.baddroids;
 
 import android.app.IntentService;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 import it.unige.dibris.baddroids.db.PermInvokeDbHelper;
 import it.unige.dibris.baddroids.engine.Extractor;
@@ -17,7 +20,7 @@ import it.unige.dibris.baddroids.engine.Classifier;
 public class ClassificationService extends IntentService {
     private static final String BASE_APK = "BASE_APK";
     private static final String CLASS_NAME = "ClassificationService";
-
+    private static final int notificationId = 0;
 
     public ClassificationService() {
         super(CLASS_NAME);
@@ -43,7 +46,19 @@ public class ClassificationService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             String baseApk = intent.getStringExtra(BASE_APK);
+            String packName = baseApk.replaceAll("/data/app/", "").replaceAll("/base.apk", "");
 
+            NotificationCompat.Builder startNotification =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(android.R.drawable.ic_dialog_info)
+                            .setContentTitle("BaDDroids analysis")
+                            .setContentText(packName)
+                            .setAutoCancel(true)
+                            .setNumber(1);
+            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.notify(notificationId, startNotification.build());
+
+            // Classification
             File apk = new File(baseApk);
             if (!apk.exists()) {
                 Log.e(CLASS_NAME, String.format("%s doesn't exists!", baseApk));
@@ -57,21 +72,15 @@ public class ClassificationService extends IntentService {
             try {
                 extractor.extract();
                 dbHelper = PermInvokeDbHelper.getInstance(getApplicationContext());
-                //dbHelper.try2Fix();
-                    /*
-                    Long test;
-                    test = dbHelper.getWeightromPermission("android.permission.SEND_SMS");
-                    test = dbHelper.getWeightromPermission("nothing");
-                    test = dbHelper.getWeightFromInvoke("java.lang.String-><init>");
-                    test = dbHelper.getWeightFromInvoke("nothing2");
-                    */
                 Log.d(CLASS_NAME, "--- extraction finished");
+
                 Classifier classifier = new Classifier(extractor, dbHelper);
                 boolean isMalware = classifier.isMalware();
                 long end_time = System.nanoTime();
                 int delta_time = (int) ((end_time - start_time) / 1000000);
-                Log.d(CLASS_NAME, "Time needed: " + delta_time + " ms");
-                Log.d(CLASS_NAME, "IsMalware? " + isMalware);
+
+                String msg = String.format(Locale.ENGLISH, "apk=%s isMalware=%s time=%dms", baseApk, isMalware, delta_time);
+                Log.d(CLASS_NAME, msg);
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
@@ -81,6 +90,5 @@ public class ClassificationService extends IntentService {
             Log.d(CLASS_NAME, String.format("<<< End extracting from=%s", baseApk));
         }
     }
-
 
 }

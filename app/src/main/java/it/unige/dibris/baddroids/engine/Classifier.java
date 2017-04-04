@@ -25,10 +25,10 @@ public class Classifier {
     }
 
 
-    private static final double COSTANT = -0.134799;
+    private static final double CONSTANT = -0.134799;
 
     public boolean isMalware() {
-        double tmp, ris = COSTANT;
+        double tmp, ris = CONSTANT;
 
         for (String pername : extractor.getAndroidDeclaredPermissions()) {
             tmp = db.getWeightromPermission(pername);

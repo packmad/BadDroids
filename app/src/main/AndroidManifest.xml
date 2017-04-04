@@ -27,6 +27,14 @@
         <service
             android:name=".ClassificationService"
             android:exported="false"></service>
+
+        <receiver android:name=".NewInstallReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_INSTALL" />
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <data android:scheme="package"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
