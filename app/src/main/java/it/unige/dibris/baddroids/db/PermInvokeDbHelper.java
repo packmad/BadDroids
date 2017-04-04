@@ -167,7 +167,7 @@ public class PermInvokeDbHelper extends SQLiteOpenHelper {
 
         double res = -1.0;
         if (cursor.getCount() != 1) {
-            Log.e(TAG, String.format("cursor.count=%d with searchName=%s", cursor.getCount(), searchName));
+            Log.w(TAG, String.format("cursor.count=%d with searchName=%s", cursor.getCount(), searchName));
         }
         else if (cursor.moveToNext()) {
             res = cursor.getDouble(cursor.getColumnIndexOrThrow(id));
@@ -191,11 +191,5 @@ public class PermInvokeDbHelper extends SQLiteOpenHelper {
                 PermissionEntry.COLUMN_NAME_PERNAME,
                 PermissionEntry.TABLE_NAME);
     }
-
-    /*
-    public void try2Fix() {
-        getWritableDatabase().execSQL("PRAGMA temp_store_directory='/data/data/it.unige.dibris.baddroids/tmpdb'");
-    }
-    */
 
 }
