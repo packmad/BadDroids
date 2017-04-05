@@ -16,8 +16,9 @@ import it.unige.dibris.baddroids.db.PermInvokeDbHelper;
 import it.unige.dibris.baddroids.engine.Extractor;
 import it.unige.dibris.baddroids.engine.Classifier;
 
-import static it.unige.dibris.baddroids.Constants.APK;
+import static it.unige.dibris.baddroids.Constants.PACKNAME;
 import static it.unige.dibris.baddroids.Constants.ISMALWARE;
+import static it.unige.dibris.baddroids.Constants.TIME;
 
 
 public class ClassificationService extends IntentService {
@@ -49,7 +50,7 @@ public class ClassificationService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             String baseApk = intent.getStringExtra(BASE_APK);
-            String packName = baseApk.replaceAll("/data/app/", "").replaceAll("/base.apk", "");
+            String packName = baseApk.replaceAll("/data/app/", "").replaceAll("-1/base.apk", "");
 
             NotificationCompat.Builder startNotification =
                     new NotificationCompat.Builder(this)
@@ -87,8 +88,9 @@ public class ClassificationService extends IntentService {
 
                 Intent scanResultIntent = new Intent(this, ScanResultActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString(APK, baseApk);
+                bundle.putString(PACKNAME, packName);
                 bundle.putBoolean(ISMALWARE, isMalware);
+                bundle.putInt(TIME, delta_time);
                 scanResultIntent.putExtras(bundle);
                 scanResultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(scanResultIntent);
