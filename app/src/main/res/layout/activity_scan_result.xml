@@ -16,12 +16,11 @@
         android:text="Package name:"
         android:textStyle="bold"
         android:layout_marginStart="16dp"
-        tools:layout_constraintTop_creator="1"
         tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toBottomOf="@+id/textViewPackNameResult"
+        app:layout_constraintBottom_toTopOf="@+id/textView4"
         tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textViewPackNameResult" />
+        android:layout_marginBottom="37dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <TextView
         android:id="@+id/textViewScanTime"
@@ -32,10 +31,10 @@
         android:layout_marginStart="46dp"
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewScanTimeResult"
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/textViewScanTimeResult" />
 
     <TextView
         android:id="@+id/textViewPackNameResult"
@@ -43,12 +42,13 @@
         android:layout_height="wrap_content"
         android:text="pack_name"
         android:layout_marginEnd="101dp"
-        android:layout_marginTop="63dp"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDetected"
-        tools:layout_constraintRight_creator="1"
         android:layout_marginStart="100dp"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/textViewProbabilityResult"
         app:layout_constraintRight_toRightOf="parent"
         tools:layout_constraintLeft_creator="1"
+        android:layout_marginBottom="37dp"
         app:layout_constraintLeft_toLeftOf="@+id/textViewDetected" />
 
     <TextView
@@ -71,25 +71,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="scan_time"
-        tools:layout_constraintTop_creator="1"
         tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/buttonUninstall"
         tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="@+id/textViewProbabilityResult"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginBottom="72dp"
+        app:layout_constraintLeft_toLeftOf="@+id/textViewProbabilityResult" />
 
     <Button
         android:id="@+id/buttonUninstall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Uninstall App"
-        android:layout_marginEnd="16dp"
-        tools:layout_constraintTop_creator="1"
+        android:layout_marginEnd="17dp"
         tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="@+id/textViewScanTimeResult"
-        android:layout_marginTop="275dp"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDetected"
-        android:layout_marginRight="17dp" />
+        android:layout_marginBottom="94dp" />
 
     <TextView
         android:id="@+id/textView4"
@@ -98,10 +96,10 @@
         android:text="Probability:"
         android:textStyle="bold"
         android:layout_marginStart="41dp"
-        tools:layout_constraintTop_creator="1"
-        android:layout_marginTop="37dp"
-        app:layout_constraintTop_toBottomOf="@+id/textViewPackName"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/textViewDexSize"
         tools:layout_constraintLeft_creator="1"
+        android:layout_marginBottom="32dp"
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <TextView
@@ -109,9 +107,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="probability"
-        tools:layout_constraintTop_creator="1"
-        android:layout_marginTop="37dp"
-        app:layout_constraintTop_toBottomOf="@+id/textViewPackNameResult"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/textViewDexSizeResult"
         tools:layout_constraintLeft_creator="1"
+        android:layout_marginBottom="32dp"
         app:layout_constraintLeft_toLeftOf="@+id/textViewPackNameResult" />
+
+    <TextView
+        android:id="@+id/textViewDexSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="Dex size:"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/textViewScanTime"
+        android:layout_marginEnd="2dp"
+        app:layout_constraintRight_toRightOf="@+id/textViewScanTime"
+        android:layout_marginBottom="29dp" />
+
+    <TextView
+        android:id="@+id/textViewDexSizeResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="dex_size"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/textViewScanTimeResult"
+        tools:layout_constraintLeft_creator="1"
+        android:layout_marginBottom="29dp"
+        app:layout_constraintLeft_toLeftOf="@+id/textViewScanTimeResult" />
 </android.support.constraint.ConstraintLayout>

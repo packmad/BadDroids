@@ -16,6 +16,7 @@ import it.unige.dibris.baddroids.db.PermInvokeDbHelper;
 import it.unige.dibris.baddroids.engine.Extractor;
 import it.unige.dibris.baddroids.engine.Classifier;
 
+import static it.unige.dibris.baddroids.Constants.DEXSIZE;
 import static it.unige.dibris.baddroids.Constants.PACKNAME;
 import static it.unige.dibris.baddroids.Constants.ISMALWARE;
 import static it.unige.dibris.baddroids.Constants.PROBABILITY;
@@ -88,6 +89,7 @@ public class ClassificationService extends IntentService {
 
                 boolean isMalware = classifierResult.isMalware();
                 double probability = classifierResult.getProbability();
+                long dexSize = extractor.getDexSize();
 
                 String msg = String.format(Locale.ENGLISH, "apk=%s isMalware=%s prob=%f time=%dms", baseApk, isMalware, probability, delta_time);
                 Log.d(CLASS_NAME, msg);
@@ -98,6 +100,7 @@ public class ClassificationService extends IntentService {
                 bundle.putBoolean(ISMALWARE, isMalware);
                 bundle.putDouble(PROBABILITY, probability);
                 bundle.putInt(TIME, delta_time);
+                bundle.putLong(DEXSIZE, dexSize);
                 scanResultIntent.putExtras(bundle);
                 scanResultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(scanResultIntent);

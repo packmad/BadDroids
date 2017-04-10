@@ -17,6 +17,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,9 +27,12 @@ public class Extractor {
     private Set<MethodInvocation> methodInvocations;
     private Set<String> androidDeclaredPermissions;
     private File apkFile;
+    private long dexSize;
+
 
     public Extractor(File apkFile) {
         this.apkFile = apkFile;
+        this.dexSize = -1;
     }
 
     public Set<MethodInvocation> getMethodInvocations() {
@@ -44,6 +49,19 @@ public class Extractor {
 
     public void setAndroidDeclaredPermissions(Set<String> androidDeclaredPermissions) {
         this.androidDeclaredPermissions = androidDeclaredPermissions;
+    }
+
+    public long getDexSize() throws IOException {
+        if (dexSize == -1) {
+            JarFile jarFile = new JarFile(apkFile);
+            JarEntry jarEntry = jarFile.getJarEntry("classes.dex");
+            dexSize = jarEntry.getSize();
+        }
+        return dexSize;
+    }
+
+    public void setDexSize(long dexSize) {
+        this.dexSize = dexSize;
     }
 
     public File getApkFile() {
