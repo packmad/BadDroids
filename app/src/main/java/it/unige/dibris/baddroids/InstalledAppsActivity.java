@@ -37,7 +37,9 @@ public class InstalledAppsActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 PackageInfo pi = installedPackages.get(arg2);
-                ClassificationService.startClassification(self, pi.applicationInfo.publicSourceDir);
+                String baseApk = pi.applicationInfo.publicSourceDir;
+                String packName = pi.applicationInfo.processName;
+                ClassificationService.startClassification(self, packName, baseApk);
             }
         });
 

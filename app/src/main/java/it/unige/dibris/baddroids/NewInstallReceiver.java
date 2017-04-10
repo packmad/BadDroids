@@ -17,7 +17,7 @@ public class NewInstallReceiver extends BroadcastReceiver {
         try {
             ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(packageName, 0);
             Log.d(TAG, "New app installed: " + packageName);
-            ClassificationService.startClassification(context, appInfo.publicSourceDir);
+            ClassificationService.startClassification(context, appInfo.processName, appInfo.publicSourceDir);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
 

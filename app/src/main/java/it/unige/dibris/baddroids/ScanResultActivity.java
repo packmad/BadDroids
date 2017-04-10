@@ -14,8 +14,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Locale;
+
 import static it.unige.dibris.baddroids.Constants.PACKNAME;
 import static it.unige.dibris.baddroids.Constants.ISMALWARE;
+import static it.unige.dibris.baddroids.Constants.PROBABILITY;
 import static it.unige.dibris.baddroids.Constants.TIME;
 
 public class ScanResultActivity extends Activity {
@@ -32,15 +35,18 @@ public class ScanResultActivity extends Activity {
         if (bundle != null) {
             final String packName = bundle.getString(PACKNAME);
             boolean isMalware = bundle.getBoolean(ISMALWARE);
+            double probPercent = bundle.getDouble(PROBABILITY) * 100;
             int time = bundle.getInt(TIME);
 
             TextView detected = (TextView)findViewById(R.id.textViewDetected);
             TextView packNameResult = (TextView)findViewById(R.id.textViewPackNameResult);
             TextView scanTimeResult = (TextView)findViewById(R.id.textViewScanTimeResult);
+            TextView probabilityResult = (TextView)findViewById(R.id.textViewProbabilityResult);
             Button buttonUninstall = (Button)findViewById(R.id.buttonUninstall);
 
             packNameResult.setText(packName);
-            scanTimeResult.setText(time+"ms");
+            probabilityResult.setText(String.format(Locale.ENGLISH, "%.1f %%", probPercent));
+            scanTimeResult.setText(String.format(Locale.ENGLISH, "%d ms", time));
 
             View decorView = getWindow().getDecorView();
             if (isMalware) {

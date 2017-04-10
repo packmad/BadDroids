@@ -18,11 +18,13 @@ import it.unige.dibris.baddroids.engine.Classifier;
 
 import static it.unige.dibris.baddroids.Constants.PACKNAME;
 import static it.unige.dibris.baddroids.Constants.ISMALWARE;
+import static it.unige.dibris.baddroids.Constants.PROBABILITY;
 import static it.unige.dibris.baddroids.Constants.TIME;
 
 
 public class ClassificationService extends IntentService {
     private static final String BASE_APK = "BASE_APK";
+    private static final String PACK_NAME = "PACK_NAME";
     private static final String CLASS_NAME = "ClassificationService";
     private static final int notificationId = 0;
 
@@ -31,10 +33,11 @@ public class ClassificationService extends IntentService {
     }
 
 
-    public static void startClassification(Context context, String baseApk) {
+    public static void startClassification(Context context, String packname, String baseApk) {
         Intent intent = new Intent(context, ClassificationService.class);
         Bundle bundle = new Bundle();
         bundle.putString(BASE_APK, baseApk);
+        bundle.putString(PACK_NAME, packname);
         intent.putExtras(bundle);
         context.startService(intent);
 
@@ -50,7 +53,7 @@ public class ClassificationService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             String baseApk = intent.getStringExtra(BASE_APK);
-            String packName = baseApk.replaceAll("/data/app/", "").replaceAll("-1/base.apk", "");
+            String packName = intent.getStringExtra(PACK_NAME);
 
             NotificationCompat.Builder startNotification =
                     new NotificationCompat.Builder(this)
@@ -79,17 +82,21 @@ public class ClassificationService extends IntentService {
                 Log.d(CLASS_NAME, "--- extraction finished");
 
                 Classifier classifier = new Classifier(extractor, dbHelper);
-                boolean isMalware = classifier.isMalware();
+                Classifier.ClassifierResult classifierResult = classifier.getResult();
                 long end_time = System.nanoTime();
                 int delta_time = (int) ((end_time - start_time) / 1000000);
 
-                String msg = String.format(Locale.ENGLISH, "apk=%s isMalware=%s time=%dms", baseApk, isMalware, delta_time);
+                boolean isMalware = classifierResult.isMalware();
+                double probability = classifierResult.getProbability();
+
+                String msg = String.format(Locale.ENGLISH, "apk=%s isMalware=%s prob=%f time=%dms", baseApk, isMalware, probability, delta_time);
                 Log.d(CLASS_NAME, msg);
 
                 Intent scanResultIntent = new Intent(this, ScanResultActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString(PACKNAME, packName);
                 bundle.putBoolean(ISMALWARE, isMalware);
+                bundle.putDouble(PROBABILITY, probability);
                 bundle.putInt(TIME, delta_time);
                 scanResultIntent.putExtras(bundle);
                 scanResultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
