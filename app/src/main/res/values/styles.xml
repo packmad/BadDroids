@@ -5,13 +5,13 @@
     </style>
 
     <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
-        <item name="android:background"  tools:ignore="NewApi">@color/LightBlue</item>
+        <item name="android:background"  tools:ignore="NewApi">@color/WhiteSmoke</item>
 
     </style>
 
     <style name="Titles">
-        <item name="android:textStyle">bold|italic</item>
-        <item name="android:textColor">@color/RoyalBlue</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="Buttons">
