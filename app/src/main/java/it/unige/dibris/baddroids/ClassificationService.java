@@ -89,6 +89,8 @@ public class ClassificationService extends IntentService {
 
                 boolean isMalware = classifierResult.isMalware();
                 double probability = classifierResult.getProbability();
+                if (!isMalware)
+                    probability = 1 - probability;
                 long dexSize = extractor.getDexSize();
 
                 String msg = String.format(Locale.ENGLISH, "apk=%s isMalware=%s prob=%f time=%dms", baseApk, isMalware, probability, delta_time);

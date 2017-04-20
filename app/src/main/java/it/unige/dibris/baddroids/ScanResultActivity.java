@@ -6,11 +6,15 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +41,7 @@ public class ScanResultActivity extends Activity {
             final String packName = bundle.getString(PACKNAME);
             boolean isMalware = bundle.getBoolean(ISMALWARE);
             double probPercent = bundle.getDouble(PROBABILITY) * 100;
-            double dexSizeKiB = (double)bundle.getLong(DEXSIZE) * 0.0009765625; // 1 / 1024
+            double dexSizeKiB = (double)bundle.getLong(DEXSIZE) * 0.0009765625; // 1/1024
             int time = bundle.getInt(TIME);
 
             TextView detected = (TextView)findViewById(R.id.textViewDetected);
@@ -52,10 +56,11 @@ public class ScanResultActivity extends Activity {
             scanTimeResult.setText(String.format(Locale.ENGLISH, "%d ms", time));
             dexSizeResult.setText(String.format(Locale.ENGLISH, "%.1f KiB", dexSizeKiB));
 
-            View decorView = getWindow().getDecorView();
+            ImageView imageView = (ImageView)findViewById(R.id.imgDroidResult);
             if (isMalware) {
-                decorView.setBackgroundColor(Color.RED);
-                detected.setText("MALWARE DETECTED!");
+                imageView.setImageResource(R.drawable.red_droid);
+                detected.setText("MALWARE!");
+                detected.setTextColor(Color.RED);
                 buttonUninstall.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         try {
@@ -71,8 +76,9 @@ public class ScanResultActivity extends Activity {
                 });
             }
             else {
-                decorView.setBackgroundColor(Color.GREEN);
+                imageView.setImageResource(R.drawable.green_droid);
                 detected.setText("CLEAN");
+                detected.setTextColor(ContextCompat.getColor(context, R.color.holo_green_dark));
                 buttonUninstall.setVisibility(View.INVISIBLE);
             }
         }
