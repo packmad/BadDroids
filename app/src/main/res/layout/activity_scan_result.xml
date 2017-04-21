@@ -41,59 +41,57 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="pack_name"
-        android:layout_marginEnd="101dp"
-        android:layout_marginStart="100dp"
-        tools:layout_constraintRight_creator="1"
         tools:layout_constraintBottom_creator="1"
         app:layout_constraintBottom_toTopOf="@+id/textViewProbabilityResult"
-        app:layout_constraintRight_toRightOf="parent"
         tools:layout_constraintLeft_creator="1"
         android:layout_marginBottom="37dp"
-        app:layout_constraintLeft_toRightOf="@+id/textViewDexSize" />
+        app:layout_constraintLeft_toLeftOf="@+id/textViewProbabilityResult" />
 
     <TextView
         android:id="@+id/textViewDetected"
         android:layout_width="127dp"
         android:layout_height="48dp"
-        android:layout_marginBottom="47dp"
-        android:layout_marginTop="35dp"
         android:gravity="center"
         android:text="detected"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/imgDroidResult"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_constraintBottom_creator="1"
-        tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintRight_creator="1"
         tools:layout_constraintTop_creator="1"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintVertical_bias="1.0" />
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toBottomOf="@+id/imgDroidResult"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="30dp"
+        tools:layout_constraintLeft_creator="1"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textViewScanTimeResult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="scan_time"
+        tools:layout_constraintRight_creator="1"
         tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toTopOf="@+id/buttonUninstall"
-        tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="71dp"
-        app:layout_constraintLeft_toLeftOf="@+id/textViewProbabilityResult" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="109dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="219dp" />
 
     <Button
         android:id="@+id/buttonUninstall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Uninstall App"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="17dp"
+        tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintBottom_creator="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="@+id/textViewScanTimeResult"
-        android:layout_marginBottom="94dp" />
+        android:layout_marginTop="109dp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDexSizeResult"
+        android:layout_marginBottom="108dp" />
 
     <TextView
         android:id="@+id/textView4"
@@ -105,7 +103,7 @@
         tools:layout_constraintBottom_creator="1"
         app:layout_constraintBottom_toTopOf="@+id/textViewDexSize"
         tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="31dp"
+        android:layout_marginBottom="30dp"
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <TextView
@@ -116,8 +114,8 @@
         tools:layout_constraintBottom_creator="1"
         app:layout_constraintBottom_toTopOf="@+id/textViewDexSizeResult"
         tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="31dp"
-        app:layout_constraintLeft_toLeftOf="@+id/textViewPackNameResult" />
+        android:layout_marginBottom="30dp"
+        app:layout_constraintLeft_toLeftOf="@+id/textViewDexSizeResult" />
 
     <TextView
         android:id="@+id/textViewDexSize"
@@ -145,18 +143,19 @@
 
     <ImageView
         android:id="@+id/imgDroidResult"
-        android:layout_width="94dp"
-        android:layout_height="102dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:srcCompat="@mipmap/baddroids"
+        android:layout_marginStart="16dp"
+        app:layout_constraintRight_toLeftOf="@+id/textViewDetected"
         tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
         tools:layout_constraintBottom_creator="1"
         app:layout_constraintBottom_toTopOf="@+id/textViewPackName"
-        android:layout_marginStart="16dp"
+        android:layout_marginEnd="19dp"
         android:layout_marginTop="16dp"
         tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="11dp"
+        android:layout_marginBottom="18dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="16dp"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
