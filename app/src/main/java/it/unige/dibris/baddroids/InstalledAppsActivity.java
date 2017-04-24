@@ -1,6 +1,9 @@
 package it.unige.dibris.baddroids;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -9,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,11 +39,32 @@ public class InstalledAppsActivity extends Activity {
         apps.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                PackageInfo pi = installedPackages.get(arg2);
-                String baseApk = pi.applicationInfo.publicSourceDir;
-                String packName = pi.applicationInfo.processName;
-                ClassificationService.startClassification(self, packName, baseApk);
+            public void onItemClick(AdapterView<?> arg0, View arg1, final int arg2, long arg3) {
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(self);
+                alertDialogBuilder.setMessage("The analysis will continue in background");
+
+                alertDialogBuilder.setPositiveButton("Ok",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            PackageInfo pi = installedPackages.get(arg2);
+                            String baseApk = pi.applicationInfo.publicSourceDir;
+                            String packName = pi.applicationInfo.processName;
+                            ClassificationService.startClassification(self, packName, baseApk);
+                        }
+                    });
+
+                alertDialogBuilder.setNegativeButton("No",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //finish();
+                        }
+                });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
             }
         });
 

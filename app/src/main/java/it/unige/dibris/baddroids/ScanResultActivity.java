@@ -77,7 +77,7 @@ public class ScanResultActivity extends Activity {
             }
             else {
                 imageView.setImageResource(R.drawable.green_droid);
-                detected.setText("GOODWARE");
+                detected.setText("CLEAN");
                 detected.setTextColor(ContextCompat.getColor(context, R.color.holo_green_dark));
                 buttonUninstall.setVisibility(View.INVISIBLE);
             }
