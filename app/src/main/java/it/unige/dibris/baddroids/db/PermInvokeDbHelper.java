@@ -14,28 +14,36 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import it.unige.dibris.baddroids.App;
-import it.unige.dibris.baddroids.db.PermInvokeContract.PermissionEntry;
 import it.unige.dibris.baddroids.db.PermInvokeContract.MethodInvocationEntry;
-import it.unige.dibris.baddroids.engine.MethodInvocation;
+import it.unige.dibris.baddroids.db.PermInvokeContract.PermissionEntry;
 
 public class PermInvokeDbHelper extends SQLiteOpenHelper {
     private static final String TAG = PermInvokeDbHelper.class.getCanonicalName();
 
     private static final String DATABASE_NAME = "PermInvoke.db";
+    private static final int DATABASE_VERSION = 3;
+    private static final String SQL_CREATE_PERMISSION =
+            "CREATE TABLE " + PermissionEntry.TABLE_NAME + " (" +
+                    PermissionEntry._ID + " INTEGER PRIMARY KEY," +
+                    PermissionEntry.COLUMN_NAME_PERNAME + " TEXT," +
+                    PermissionEntry.COLUMN_NAME_PERWEIGHT + " REAL)";
+    private static final String SQL_CREATE_PERMISSION_INDEX =
+            "CREATE INDEX permission_index ON " + PermissionEntry.TABLE_NAME + " (" +
+                    PermissionEntry.COLUMN_NAME_PERNAME + ")";
+    private static final String SQL_DELETE_PERMISSION =
+            "DROP TABLE IF EXISTS " + PermissionEntry.TABLE_NAME;
+    private static final String SQL_CREATE_INVOKE =
+            "CREATE TABLE " + MethodInvocationEntry.TABLE_NAME + " (" +
+                    MethodInvocationEntry._ID + " INTEGER PRIMARY KEY," +
+                    MethodInvocationEntry.COLUMN_NAME_CLASS_METHOD + " TEXT," +
+                    MethodInvocationEntry.COLUMN_NAME_INVWEIGHT + " REAL)";
+    private static final String SQL_CREATE_INVOKE_INDEX =
+            "CREATE INDEX invoke_index ON " + MethodInvocationEntry.TABLE_NAME + " (" +
+                    MethodInvocationEntry.COLUMN_NAME_CLASS_METHOD + ")";
+    private static final String SQL_DELETE_INVOKE =
+            "DROP TABLE IF EXISTS " + MethodInvocationEntry.TABLE_NAME;
     private static PermInvokeDbHelper mInstance = null;
-    private static final int DATABASE_VERSION = 2;
     private static SQLiteDatabase readableDatabase;
-
-
-    public static PermInvokeDbHelper getInstance(Context ctx) {
-        if (mInstance == null) {
-            mInstance = new PermInvokeDbHelper(ctx.getApplicationContext());
-        }
-        if (readableDatabase == null || !readableDatabase.isOpen())
-            readableDatabase = mInstance.getReadableDatabase();
-        return mInstance;
-    }
-
 
     private PermInvokeDbHelper(Context context) {
         this(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -45,33 +53,14 @@ public class PermInvokeDbHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-
-    private static final String SQL_CREATE_PERMISSION =
-            "CREATE TABLE " + PermissionEntry.TABLE_NAME + " (" +
-                    PermissionEntry._ID + " INTEGER PRIMARY KEY," +
-                    PermissionEntry.COLUMN_NAME_PERNAME + " TEXT," +
-                    PermissionEntry.COLUMN_NAME_PERWEIGHT + " REAL)";
-
-    private static final String SQL_CREATE_PERMISSION_INDEX =
-            "CREATE INDEX permission_index ON " + PermissionEntry.TABLE_NAME + " (" +
-                    PermissionEntry.COLUMN_NAME_PERNAME + ")";
-
-    private static final String SQL_DELETE_PERMISSION =
-            "DROP TABLE IF EXISTS " + PermissionEntry.TABLE_NAME;
-
-    private static final String SQL_CREATE_INVOKE =
-            "CREATE TABLE " + MethodInvocationEntry.TABLE_NAME + " (" +
-                    MethodInvocationEntry._ID + " INTEGER PRIMARY KEY," +
-                    MethodInvocationEntry.COLUMN_NAME_CLASS_METHOD + " TEXT," +
-                    MethodInvocationEntry.COLUMN_NAME_INVWEIGHT + " REAL)";
-
-    private static final String SQL_CREATE_INVOKE_INDEX =
-            "CREATE INDEX invoke_index ON " + MethodInvocationEntry.TABLE_NAME + " (" +
-                    MethodInvocationEntry.COLUMN_NAME_CLASS_METHOD + ")";
-
-    private static final String SQL_DELETE_INVOKE =
-            "DROP TABLE IF EXISTS " + MethodInvocationEntry.TABLE_NAME;
-
+    public static PermInvokeDbHelper getInstance(Context ctx) {
+        if (mInstance == null) {
+            mInstance = new PermInvokeDbHelper(ctx.getApplicationContext());
+        }
+        if (readableDatabase == null || !readableDatabase.isOpen())
+            readableDatabase = mInstance.getReadableDatabase();
+        return mInstance;
+    }
 
     /*
     https://stackoverflow.com/questions/1983979/insertion-of-data-after-creating-index-on-empty-table-or-creating-unique-index-a
