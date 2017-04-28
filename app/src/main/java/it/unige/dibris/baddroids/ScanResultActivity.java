@@ -3,11 +3,8 @@ package it.unige.dibris.baddroids;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,12 +18,13 @@ import android.widget.Toast;
 import java.util.Locale;
 
 import static it.unige.dibris.baddroids.Constants.DEXSIZE;
-import static it.unige.dibris.baddroids.Constants.PACKNAME;
 import static it.unige.dibris.baddroids.Constants.ISMALWARE;
+import static it.unige.dibris.baddroids.Constants.PACKNAME;
 import static it.unige.dibris.baddroids.Constants.PROBABILITY;
 import static it.unige.dibris.baddroids.Constants.TIME;
 
 public class ScanResultActivity extends Activity {
+    final static double THRESHOLD = 70;
     final Context context = this;
 
 
@@ -80,6 +78,12 @@ public class ScanResultActivity extends Activity {
                 detected.setText("CLEAN");
                 detected.setTextColor(ContextCompat.getColor(context, R.color.holo_green_dark));
                 buttonUninstall.setVisibility(View.INVISIBLE);
+            }
+
+            if (probPercent <= THRESHOLD) {
+                imageView.setImageResource(R.drawable.orange_droid);
+                detected.setTextColor(ContextCompat.getColor(context, R.color.DarkOrange));
+                probabilityResult.setTextColor(ContextCompat.getColor(context, R.color.DarkOrange));
             }
         }
 
