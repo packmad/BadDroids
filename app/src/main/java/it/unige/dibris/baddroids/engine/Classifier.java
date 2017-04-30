@@ -4,8 +4,14 @@ import it.unige.dibris.baddroids.db.PermInvokeDbHelper;
 
 
 public class Classifier {
+
+    /* model 7497
     private static final double CONSTANT_B = 0.12667684;
     private static final double CONSTANT_GAMMA = 5.6633748;
+    */
+    private static final double CONSTANT_B = -0.099553;
+    private static final double CONSTANT_GAMMA = 5.5857;
+
     private Extractor extractor;
     private PermInvokeDbHelper db;
 
@@ -13,10 +19,6 @@ public class Classifier {
     public Classifier(Extractor extractor, PermInvokeDbHelper db) {
         this.extractor = extractor;
         this.db = db;
-        /*
-        this.methodInvocationWeights = new HashSet<>(extractor.getMethodInvocations().size());
-        this.androidDeclaredPermissionsWeights = new HashSet<>(extractor.getAndroidDeclaredPermissions().size());
-        */
     }
 
     public ClassifierResult getResult() {
