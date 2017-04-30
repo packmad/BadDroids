@@ -1,12 +1,11 @@
 package it.unige.dibris.baddroids.engine;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import it.unige.dibris.baddroids.db.PermInvokeDbHelper;
 
 
 public class Classifier {
+    private static final double CONSTANT_B = 0.12667684;
+    private static final double CONSTANT_GAMMA = 5.6633748;
     private Extractor extractor;
     private PermInvokeDbHelper db;
 
@@ -19,29 +18,6 @@ public class Classifier {
         this.androidDeclaredPermissionsWeights = new HashSet<>(extractor.getAndroidDeclaredPermissions().size());
         */
     }
-
-
-    public class ClassifierResult {
-        private boolean isMalware;
-        private double probability;
-
-        public ClassifierResult(boolean isMalware, double probability) {
-            this.isMalware = isMalware;
-            this.probability = probability;
-        }
-
-        public boolean isMalware() {
-            return isMalware;
-        }
-
-        public double getProbability() {
-            return probability;
-        }
-    }
-
-
-    private static final double CONSTANT_B = -0.099553;
-    private static final double CONSTANT_GAMMA= 5.5857;
 
     public ClassifierResult getResult() {
         double tmp, ris;
@@ -60,6 +36,24 @@ public class Classifier {
             }
         }
         return new ClassifierResult(ris > 0, 1 / (1 +  java.lang.Math.exp(-CONSTANT_GAMMA * ris)));
+    }
+
+    public class ClassifierResult {
+        private boolean isMalware;
+        private double probability;
+
+        public ClassifierResult(boolean isMalware, double probability) {
+            this.isMalware = isMalware;
+            this.probability = probability;
+        }
+
+        public boolean isMalware() {
+            return isMalware;
+        }
+
+        public double getProbability() {
+            return probability;
+        }
     }
 
 }

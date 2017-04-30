@@ -24,7 +24,7 @@ import static it.unige.dibris.baddroids.Constants.PROBABILITY;
 import static it.unige.dibris.baddroids.Constants.TIME;
 
 public class ScanResultActivity extends Activity {
-    final static double THRESHOLD = 70;
+    final static double THRESHOLD = 80;
     final Context context = this;
 
 

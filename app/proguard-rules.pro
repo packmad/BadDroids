@@ -23,3 +23,12 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-dontwarn net.dongliu.**
+-dontwarn com.google.common.**
+-dontwarn sun.misc.**
+-dontwarn sun.security.pkcs.**
+
+-keep class net.dongliu.** { *; }
+-keep class com.google.common.** { *; }
+-keep class sun.misc.** { *; }
+-keep class sun.security.pkcs.** { *; }
