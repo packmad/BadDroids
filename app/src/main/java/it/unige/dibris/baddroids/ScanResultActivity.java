@@ -15,7 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 import static it.unige.dibris.baddroids.Constants.DEXSIZE;
 import static it.unige.dibris.baddroids.Constants.ISMALWARE;
@@ -55,7 +57,7 @@ public class ScanResultActivity extends Activity {
             dexSizeResult.setText(String.format(Locale.ENGLISH, "%.1f KiB", dexSizeKiB));
 
             ImageView imageView = (ImageView)findViewById(R.id.imgDroidResult);
-            if (isMalware) {
+            if (isMalware && !isWhitelisted(packName)) {
                 imageView.setImageResource(R.drawable.red_droid);
                 detected.setText("MALWARE!");
                 detected.setTextColor(Color.RED);
@@ -87,5 +89,15 @@ public class ScanResultActivity extends Activity {
             }
         }
 
+    }
+
+    private boolean isWhitelisted(String packName) {
+        Set<String> whitelist = new HashSet<>(6);
+        whitelist.add("com.whatsapp");
+        whitelist.add("com.facebook.orca");
+        whitelist.add("com.instagram.android");
+        whitelist.add("com.facebook.katana");
+        whitelist.add("com.skype.raider");
+        return whitelist.contains(packName);
     }
 }

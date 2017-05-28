@@ -21,7 +21,7 @@ public class PermInvokeDbHelper extends SQLiteOpenHelper {
     private static final String TAG = PermInvokeDbHelper.class.getCanonicalName();
 
     private static final String DATABASE_NAME = "PermInvoke.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 5;
     private static final String SQL_CREATE_PERMISSION =
             "CREATE TABLE " + PermissionEntry.TABLE_NAME + " (" +
                     PermissionEntry._ID + " INTEGER PRIMARY KEY," +
